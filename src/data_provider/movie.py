@@ -101,7 +101,7 @@ class DataProcess(object):
 
   def __init__(self, input_param):
     self.paths = input_param['paths']
-    self.category = ['CA_1750'] #, ['CA_0020', 'CA_0780', 'CA_0790', 'CA_0800', 'CA_1120', 'CA_1720','CA_1750']
+    self.category = ['CA_1750', 'CA_0020', 'CA_1720','CA_1750'] #'CA_0780', 'CA_0790', 'CA_0800', 'CA_1120', ]
     self.image_width = input_param['image_width']
 
     # 3->2 as a sequence of 5
@@ -158,8 +158,11 @@ class DataProcess(object):
               continue
             img_path = os.path.join(c_dir_path, img_dir)
             
-            frame_im = Image.open(img_path)
-            frame_np = np.array(frame_im)  # (1000, 1000) numpy array
+            frame_np = cv2.imread(img_path) / 255
+            # frame_np = cv2.cvtColor(frame_im, cv2.COLOR_BGR2RGB)
+            # cv2.imshow('image', frame_im)
+            # cv2.waitKey(0)
+            # frame_np = np.array(frame_im)  # (1000, 1000) numpy array
             # print(frame_np.shape)
             # frame_np = frame_np[:, :, 0]  #
             frames_np.append(frame_np)
@@ -188,6 +191,7 @@ class DataProcess(object):
 
   def get_train_input_handle(self):
     train_data, train_indices = self.load_data(self.paths, mode='train')
+    print(f'Traning data: {train_data.shape}')
     return InputHandle(train_data, train_indices, self.input_param)
 
   def get_test_input_handle(self):

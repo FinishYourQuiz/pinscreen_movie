@@ -25,6 +25,7 @@ import cv2
 import numpy as np
 from skimage.measure import compare_ssim
 from src.utils import preprocess
+from PIL import Image
 
 
 def batch_psnr(gen_frames, gt_frames):
@@ -89,6 +90,7 @@ def test(model, test_input_handle, configs, save_name):
     img_gen = np.concatenate(img_gen)
     img_gen = preprocess.reshape_patch_back(img_gen, configs.patch_size)
     img_out = img_gen[:, -output_length:]
+    # print(f'image_gen: {img_out.shape}')->  (2, 5, 256, 256, 3)
     target_out = test_ims[:, -output_length:]
     # MSE per frame
     for i in range(output_length):
@@ -117,6 +119,11 @@ def test(model, test_input_handle, configs, save_name):
         file_name = os.path.join(path, name)
         img_gt = np.uint8(test_ims[0, i] * 255)
         cv2.imwrite(file_name, img_gt)
+        # im_rgb = cv2.cvtColor(img_gt, cv2.COLOR_BGR2RGB)
+        # Image.fromarray(im_rgb).save()
+        # img = Image.fromarray(img_gt, 'RGB')
+        # img.save(file_name)
+
       for i in range(output_length):
         if (i + configs.input_length + 1) < 10:
           name = 'pd0' + str(i + configs.input_length + 1) + '.png'
@@ -124,6 +131,7 @@ def test(model, test_input_handle, configs, save_name):
           name = 'pd' + str(i + configs.input_length + 1) + '.png'
         file_name = os.path.join(path, name)
         img_pd = img_gen[0, i]
+        # print(f'image_gen: {img_pd.shape}') -> 2, 2, 256, 256, 3
         img_pd = np.maximum(img_pd, 0)
         img_pd = np.minimum(img_pd, 1)
         img_pd = np.uint8(img_pd * 255)

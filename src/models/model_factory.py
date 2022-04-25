@@ -89,7 +89,6 @@ class Model(object):
           # define a model
           output_list = self.construct_model(self.x[i], self.real_input_flag,
                                              num_layers, num_hidden)
-
           gen_ims = output_list[0]
           loss = output_list[1]
           loss_train.append(loss / self.configs.batch_size)
