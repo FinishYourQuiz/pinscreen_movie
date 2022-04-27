@@ -151,11 +151,11 @@ class DataProcess(object):
 
         for img_dir in p_c_dir_list:  
             curr_img_n = int(img_dir[:3])
-            if isTrain:
-              if curr_img_n > self.train_frames[c_dir][0]:
-                continue
-            elif curr_img_n < self.train_frames[c_dir][0] or curr_img_n >= self.train_frames[c_dir][1]:
-              continue
+            # if isTrain:
+            #   if curr_img_n > self.train_frames[c_dir][0]:
+            #     continue
+            # elif curr_img_n < self.train_frames[c_dir][0] or curr_img_n >= self.train_frames[c_dir][1]:
+            #   continue
             img_path = os.path.join(c_dir_path, img_dir)
             
             frame_np = cv2.imread(img_path) / 255
